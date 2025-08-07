@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 
 import { TasksController } from './tasks.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { envs, TASK_SERVICE } from 'src/config';
+import { envs, NATS_SERVICE} from 'src/config';
 
 @Module({
   controllers: [TasksController],
@@ -10,11 +10,10 @@ import { envs, TASK_SERVICE } from 'src/config';
   imports: [
     ClientsModule.register([
       {
-        name: TASK_SERVICE,
-        transport: Transport.TCP,
+        name: NATS_SERVICE,
+        transport: Transport.NATS,
         options:{
-          host: envs.tasksMicroserviceHost,
-          port: envs.tasksMicroservicePort,
+         servers: envs.natsServers,
         }
       },
   ])

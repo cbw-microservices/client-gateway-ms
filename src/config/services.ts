@@ -1,1 +1,2 @@
 export const TASK_SERVICE = 'TASKS_SERVICE';
+export const NATS_SERVICE = 'NATS_SERVICE';

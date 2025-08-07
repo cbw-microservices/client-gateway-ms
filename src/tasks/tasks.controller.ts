@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, Put, Query } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
-import { TASK_SERVICE } from 'src/config';
+import { NATS_SERVICE } from 'src/config';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { PatchTaskDto } from './dto/patch-task.dto';
-import { catchError} from 'rxjs';
+import { catchError } from 'rxjs';
 @Controller('tasks')
 export class TasksController {
   constructor(
-    @Inject(TASK_SERVICE) private readonly tasksClient: ClientProxy,
+    @Inject(NATS_SERVICE) private readonly tasksClient: ClientProxy,
   ) { }
 
   @Post()
