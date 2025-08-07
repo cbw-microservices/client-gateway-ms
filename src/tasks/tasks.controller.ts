@@ -6,6 +6,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { PatchTaskDto } from './dto/patch-task.dto';
 import { catchError } from 'rxjs';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
 @Controller('tasks')
 export class TasksController {
   constructor(
@@ -25,7 +26,7 @@ export class TasksController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id', ParseMongoIdPipe) id: string) {
     return this.tasksClient.send('findOneTask', { id }).pipe(
       catchError((err) => {
         throw new RpcException(err);
@@ -34,7 +35,7 @@ export class TasksController {
 
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
+  async update(@Param('id', ParseMongoIdPipe) id: string, @Body() updateTaskDto: UpdateTaskDto) {
     return this.tasksClient.send('updateTask', { updateTaskDto, id }).pipe(
       catchError((err) => {
         throw new RpcException(err);
@@ -42,7 +43,7 @@ export class TasksController {
   }
 
   @Patch(':id')
-  async patch(@Param('id') id: string, @Body() patchTaskDto: PatchTaskDto) {
+  async patch(@Param('id', ParseMongoIdPipe) id: string, @Body() patchTaskDto: PatchTaskDto) {
     return this.tasksClient.send('patchTask', { id, patchTaskDto }).pipe(
       catchError((err) => {
         throw new RpcException(err);
@@ -50,7 +51,7 @@ export class TasksController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  async remove(@Param('id', ParseMongoIdPipe) id: string) {
     return this.tasksClient.send('removeTask', { id }).pipe(
       catchError((err) => {
         throw new RpcException(err);
@@ -67,7 +68,7 @@ export class TasksController {
 
   @Post(':id/schedule')
   async schedule(
-    @Param('id') id: string,
+    @Param('id', ParseMongoIdPipe) id: string,
     @Body() body: { runAt: Date },
   ) {
     return this.tasksClient.send('scheduleTask', {
