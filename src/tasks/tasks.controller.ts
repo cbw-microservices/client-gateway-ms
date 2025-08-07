@@ -5,7 +5,7 @@ import { TASK_SERVICE } from 'src/config';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { PatchTaskDto } from './dto/patch-task.dto';
-import { catchError, firstValueFrom } from 'rxjs';
+import { catchError} from 'rxjs';
 @Controller('tasks')
 export class TasksController {
   constructor(
