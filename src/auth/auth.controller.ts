@@ -6,11 +6,14 @@ import { catchError } from 'rxjs';
 import { AuthGuard } from './guards/auth.guard';
 import { Token, User } from './decorators';
 import { CurrentUser } from './interfaces/current-user.interface';
+import { AuthSwaggerTags, LoginSwagger, RegisterSwagger, VerifySwagger } from './docs/auth.swagger';
 
+@AuthSwaggerTags()
 @Controller('auth')
 export class AuthController {
   constructor(@Inject(NATS_SERVICE) private readonly client: ClientProxy) {}
 
+  @RegisterSwagger()
   @Post('register')
   registerUser(@Body() registerUserDto: RegisterUserDto) {
     return this.client.send('auth.register.user', registerUserDto).pipe(
@@ -20,6 +23,7 @@ export class AuthController {
     );
   }
 
+  @LoginSwagger()
   @Post('login')
   loginUser(@Body() loginUserDto: LoginUserDto) {
     return this.client.send('auth.login.user', loginUserDto).pipe(
@@ -29,10 +33,10 @@ export class AuthController {
     );
   }
 
-
-  @UseGuards( AuthGuard )
+  @VerifySwagger()
+  @UseGuards(AuthGuard)
   @Get('verify')
-  verifyToken( @User() user: CurrentUser, @Token() token: string  ) {
-    return { user, token }
+  verifyToken(@User() user: CurrentUser, @Token() token: string) {
+    return { user, token };
   }
 }
